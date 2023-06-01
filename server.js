@@ -17,7 +17,7 @@ app.use(express.json());
 
 // Start defining your routes here
 app.get("/", (req, res) => {
-  res.send("Hello Technigo!");
+  res.send("Hello from Ninas backend!");
 });
 
 const UserSchema = new mongoose.Schema({
@@ -80,6 +80,7 @@ app.post("/register", async(req, res) => {
       sucess: true,
       response: {
         username: newUser.username,
+        useremail: newUser.useremail,
         id: newUser._id,
         accessToken: newUser.accessToken
       }
@@ -93,7 +94,7 @@ app.post("/register", async(req, res) => {
 })
 // login
 app.post("/login",async(req, res) => {
-  const { username, password } = req.body;
+  const { username, useremail, password } = req.body;
   try {
     const user = await User.findOne({username})
     if (user && bcrypt.compareSync(password, user.password)) {
@@ -106,11 +107,12 @@ app.post("/login",async(req, res) => {
         response: {
           username: user.username,
           id: user._id,
+          useremail: user.useremail,
           accessToken: user.accessToken,
           discount: user.discount,
         }
       })} else {
-        res.status(400).json({
+        res.status(401).json({
           success: false,
           response: "Credentials do not match"
         })
@@ -127,7 +129,7 @@ app.post("/login",async(req, res) => {
 // Authenticate the user
 
 const authenticateUser = async (req, res, next) => {
-  const accessToken = req.header("Authorization");
+  const accessToken = req.headers.authorization;
   try {
     const user = await User.findOne({accessToken: accessToken});
     if (user) {
