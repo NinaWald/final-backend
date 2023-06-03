@@ -77,7 +77,7 @@ app.post("/register", async(req, res) => {
       password: bcrypt.hashSync(password, salt)
     }).save()
     res.status(201).json({
-      sucess: true,
+      success: true,
       response: {
         username: newUser.username,
         useremail: newUser.useremail,
