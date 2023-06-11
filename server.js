@@ -125,6 +125,30 @@ app.post("/login",async(req, res) => {
   }
 })
 
+app.delete("/user/:id", authenticateUser, async (req, res) => {
+  const userId = req.params.id;
+
+  try {
+    const deletedUser = await User.findByIdAndDelete(userId);
+    if(deletedUser) {
+      res.status(200).json({
+        success: true,
+        response: "User deleted successfully"
+      });
+    } else {
+      res.status(404).json({
+        success: false,
+        response: "User not deleted"
+      });
+    }
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      response: e
+    });
+  }
+});
+
 
 // Authenticate the user
 
