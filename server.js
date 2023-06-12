@@ -125,7 +125,30 @@ app.post("/login",async(req, res) => {
   }
 })
 
-app.delete("/user/:id", authenticateUser, async (req, res) => {
+// Authenticate the user
+
+const authenticateUser = async (req, res, next) => {
+  const accessToken = req.headers.authorization;
+  try {
+    const user = await User.findOne({accessToken: accessToken});
+    if (user) {
+      next();
+    } else {
+      res.status(401).json({
+        success: false,
+        response: "Please log in"
+      })
+    }
+  } catch (e) {
+    res.status(500).json({
+      success: false,
+      response: e
+    });
+  }
+}
+
+
+app.delete("/delete/:id", async (req, res) => {
   const userId = req.params.id;
 
   try {
@@ -150,27 +173,6 @@ app.delete("/user/:id", authenticateUser, async (req, res) => {
 });
 
 
-// Authenticate the user
-
-const authenticateUser = async (req, res, next) => {
-  const accessToken = req.headers.authorization;
-  try {
-    const user = await User.findOne({accessToken: accessToken});
-    if (user) {
-      next();
-    } else {
-      res.status(401).json({
-        success: false,
-        response: "Please log in"
-      })
-    }
-  } catch (e) {
-    res.status(500).json({
-      success: false,
-      response: e
-    });
-  }
-}
 
 
 
