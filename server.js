@@ -136,7 +136,7 @@ const authenticateUser = async (req, res, next) => {
     } else {
       res.status(401).json({
         success: false,
-        response: "Please log in"
+        response: "Request failed"
       })
     }
   } catch (e) {
