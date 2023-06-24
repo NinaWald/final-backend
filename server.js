@@ -93,7 +93,7 @@ app.post("/register", async(req, res) => {
   }
 })
 // login
-app.post("/login", authenticateUser, async(req, res) => {
+app.post("/login", async(req, res) => {
   const { username, useremail, password } = req.body;
   try {
     const user = await User.findOne({username})
@@ -148,7 +148,7 @@ const authenticateUser = async (req, res, next) => {
 }
 
 
-app.delete("/delete/:id", authenticateUser, async (req, res) => {
+app.delete("/delete/:id", async (req, res) => {
   const userId = req.params.id;
 
   try {
