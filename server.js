@@ -148,7 +148,7 @@ const authenticateUser = async (req, res, next) => {
 }
 
 
-app.delete("/delete/:id", async (req, res) => {
+app.delete("/delete/:id", authenticateUser, async (req, res) => {
   const userId = req.params.id;
 
   try {
@@ -171,7 +171,11 @@ app.delete("/delete/:id", async (req, res) => {
     });
   }
 });
-
+/*
+By adding authenticateUser as a second argument to the app.delete function, 
+you make sure that the authenticateUser middleware is executed before the callback function for the /delete/:id route. 
+This means that before the user can delete a user, the authenticateUser middleware will first verify the user's access token.
+*/
 
 
 
